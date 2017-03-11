@@ -1,6 +1,7 @@
 package com.ajasuja.codepath.flicks.adapter;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,15 +25,28 @@ import static com.ajasuja.codepath.flicks.R.id.textViewMovieTitle;
 
 public class MoviesAdapter extends ArrayAdapter<Movie> {
 
+    private boolean isLandscape = false;
+
     private static class ViewHolder {
-        private ImageView imageViewPosterImage;
+        private ImageView imageViewMovieImage;
         private TextView textViewMovieTitle;
         private TextView textViewMovieOverview;
     }
 
     public MoviesAdapter(Context context, List<Movie> movies) {
         super(context, android.R.layout.simple_list_item_1, movies);
+        checkOrientation();
     }
+
+    private void checkOrientation() {
+        int orientation = getContext().getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            isLandscape = false;
+        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            isLandscape = true;
+        }
+    }
+
 
     @NonNull
     @Override
@@ -45,7 +59,7 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
             convertView = inflater.inflate(R.layout.item_movie, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.imageViewPosterImage = (ImageView) convertView.findViewById(R.id.imageViewPosterImage);
+            viewHolder.imageViewMovieImage = (ImageView) convertView.findViewById(R.id.imageViewMovieImage);
             viewHolder.textViewMovieTitle = (TextView) convertView.findViewById(textViewMovieTitle);
             viewHolder.textViewMovieOverview = (TextView) convertView.findViewById(textViewMovieOverview);
             convertView.setTag(viewHolder);
@@ -53,8 +67,12 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.imageViewPosterImage.setImageResource(0); // clear out image from convertview
-        Picasso.with(getContext()).load(movie.getPosterPath()).into(viewHolder.imageViewPosterImage);
+        viewHolder.imageViewMovieImage.setImageResource(0); // clear out image from convertview
+        if (isLandscape) {
+            Picasso.with(getContext()).load(movie.getBackdropPath()).into(viewHolder.imageViewMovieImage);
+        } else {
+            Picasso.with(getContext()).load(movie.getPosterPath()).into(viewHolder.imageViewMovieImage);
+        }
         viewHolder.textViewMovieTitle.setText(movie.getTitle());
         viewHolder.textViewMovieOverview.setText(movie.getOverview());
 

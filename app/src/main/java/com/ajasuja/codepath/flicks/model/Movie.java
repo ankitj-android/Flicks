@@ -13,21 +13,30 @@ import java.util.List;
 
 public class Movie {
 
-    private static final String POSTER_IMAGE_ROOT_PATH = "https://image.tmdb.org/t/p/w342";
+//    private static final String IMAGE_ROOT_PATH = "https://image.tmdb.org/t/p/w342";
+    private static final String IMAGE_ROOT_PATH = "https://image.tmdb.org/t/p/";
+    private static final String POSTER_WIDTH = "w342";
+    private static final String BACKDROP_WIDTH = "w780";
 
     private String posterPath;
+    private String backdropPath;
     private String title;
     private String overview;
 
     private Movie(JSONObject jsonObject) throws JSONException {
         this.posterPath = jsonObject.getString("poster_path");
+        this.backdropPath = jsonObject.getString("backdrop_path");
         this.title = jsonObject.getString("original_title");
         this.overview = jsonObject.getString("overview");
     }
 
 
     public String getPosterPath() {
-        return POSTER_IMAGE_ROOT_PATH + posterPath;
+        return IMAGE_ROOT_PATH + POSTER_WIDTH + posterPath;
+    }
+
+    public String getBackdropPath() {
+        return IMAGE_ROOT_PATH + BACKDROP_WIDTH + backdropPath;
     }
 
     public String getTitle() {
