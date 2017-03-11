@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@android:color/background_dark">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -21,7 +22,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/textViewMovieOverview"
         android:layout_alignStart="@+id/textViewMovieOverview"
-        android:textStyle="normal|bold" />
+        android:textStyle="normal|bold"
+        android:textColor="@android:color/background_light" />
 
     <TextView
         android:text="When a wounded Christian Grey tries to entice a cautious Ana Steele back into his life, she demands a new arrangement before she will give him another chance. As the two begin to build trust and find stability, shadowy figures from Christian’s past start to circle the couple, determined to destroy their hopes for a future together."
@@ -31,5 +33,7 @@
         android:layout_toRightOf="@+id/imageViewMovieImage"
         android:layout_marginLeft="13dp"
         android:layout_marginStart="13dp"
-        android:id="@+id/textViewMovieOverview" />
+        android:id="@+id/textViewMovieOverview"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="10sp" />
 </RelativeLayout>
