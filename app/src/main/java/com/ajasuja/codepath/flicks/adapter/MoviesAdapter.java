@@ -69,9 +69,15 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
 
         viewHolder.imageViewMovieImage.setImageResource(0); // clear out image from convertview
         if (isLandscape) {
-            Picasso.with(getContext()).load(movie.getBackdropPath()).into(viewHolder.imageViewMovieImage);
+            Picasso.with(getContext())
+                    .load(movie.getBackdropPath())
+//                    .placeholder(R.drawable.loading)
+                    .into(viewHolder.imageViewMovieImage);
         } else {
-            Picasso.with(getContext()).load(movie.getPosterPath()).into(viewHolder.imageViewMovieImage);
+            Picasso.with(getContext())
+                    .load(movie.getPosterPath())
+//                    .placeholder(R.drawable.loading)
+                    .into(viewHolder.imageViewMovieImage);
         }
         viewHolder.textViewMovieTitle.setText(movie.getTitle());
         viewHolder.textViewMovieOverview.setText(movie.getOverview());
