@@ -1,10 +1,14 @@
 package com.ajasuja.codepath.flicks;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.ajasuja.codepath.flicks.activity.MovieDetailsActivity;
 import com.ajasuja.codepath.flicks.adapter.MoviesAdapter;
 import com.ajasuja.codepath.flicks.model.Movie;
 import com.loopj.android.http.AsyncHttpClient;
@@ -13,6 +17,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +54,40 @@ public class MoviesActivity extends AppCompatActivity {
 
         // attach data & view via adapter
         moviesListView.setAdapter(moviesAdapter);
+
+        // move to other activity
+        moviesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("movie details for postion ... " + position);
+                final Movie movie = movies.get(position);
+                AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+                String movieImagesUrl = String.format("https://api.themoviedb.org/3/movie/%s/images?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed", movie.getId());
+                asyncHttpClient.get(movieImagesUrl, new JsonHttpResponseHandler(){
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        try {
+                            JSONArray backdropsJsonArray = response.getJSONArray("backdrops");
+                            for (int i=0; i< backdropsJsonArray.length(); i++) {
+                                JSONObject backdropJsonObject = backdropsJsonArray.getJSONObject(i);
+                                movie.addBackdropPath(backdropJsonObject.getString("file_path"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                    }
+                });
+                Intent movie2MovieDetailsIntent = new Intent(MoviesActivity.this, MovieDetailsActivity.class);
+                movie2MovieDetailsIntent.putExtra("movie", Parcels.wrap(movie));
+                startActivity(movie2MovieDetailsIntent);
+            }
+        });
     }
 
     private void fetchMovies() {
