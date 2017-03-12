@@ -1,4 +1,4 @@
-package com.ajasuja.codepath.flicks;
+package com.ajasuja.codepath.flicks.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.ajasuja.codepath.flicks.activity.MovieDetailsActivity;
+import com.ajasuja.codepath.flicks.R;
 import com.ajasuja.codepath.flicks.adapter.MoviesAdapter;
 import com.ajasuja.codepath.flicks.model.Movie;
 import com.loopj.android.http.AsyncHttpClient;
@@ -22,8 +22,10 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import cz.msebera.android.httpclient.Header;
 
+import static butterknife.ButterKnife.bind;
 import static com.ajasuja.codepath.flicks.model.Movie.fromJsonArray;
 
 public class MoviesActivity extends AppCompatActivity {
@@ -35,7 +37,7 @@ public class MoviesActivity extends AppCompatActivity {
     private MoviesAdapter moviesAdapter;
 
     //view
-    private ListView moviesListView;
+    @BindView(R.id.listViewMovies) ListView moviesListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +48,7 @@ public class MoviesActivity extends AppCompatActivity {
         this.movies = new ArrayList<>();
         fetchMovies();
 
-        // init view
-        moviesListView = (ListView) findViewById(R.id.listViewMovies);
-
+        bind(this);
         // init adapter
         moviesAdapter = new MoviesAdapter(this, movies);
 

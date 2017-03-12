@@ -23,7 +23,8 @@
         android:layout_alignLeft="@+id/textViewMovieOverview"
         android:layout_alignStart="@+id/textViewMovieOverview"
         android:textStyle="normal|bold"
-        android:textColor="@android:color/background_light" />
+        android:textColor="@android:color/background_light"
+        android:fontFamily="casual" />
 
     <TextView
         android:text="When a wounded Christian Grey tries to entice a cautious Ana Steele back into his life, she demands a new arrangement before she will give him another chance. As the two begin to build trust and find stability, shadowy figures from Christian’s past start to circle the couple, determined to destroy their hopes for a future together."
@@ -35,5 +36,6 @@
         android:layout_marginStart="13dp"
         android:id="@+id/textViewMovieOverview"
         android:textColor="@android:color/darker_gray"
-        android:textSize="10sp" />
+        android:textSize="10sp"
+        android:fontFamily="casual" />
 </RelativeLayout>

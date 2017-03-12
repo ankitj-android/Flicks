@@ -16,6 +16,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
+
 import static com.ajasuja.codepath.flicks.R.id.textViewMovieOverview;
 import static com.ajasuja.codepath.flicks.R.id.textViewMovieTitle;
 
@@ -27,7 +29,7 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
 
     private boolean isLandscape = false;
 
-    private static class ViewHolder {
+    private static class NonPopularViewHolder {
         private ImageView imageViewMovieImage;
         private TextView textViewMovieTitle;
         private TextView textViewMovieOverview;
@@ -66,7 +68,7 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Movie movie = getItem(position);
-        ViewHolder viewHolder;
+        NonPopularViewHolder viewHolder;
 
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -77,7 +79,7 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
                 convertView.setTag(popularMovieViewHolder);
             } else {
                 convertView = inflater.inflate(R.layout.item_movie, parent, false);
-                viewHolder = new ViewHolder();
+                viewHolder = new NonPopularViewHolder();
                 viewHolder.imageViewMovieImage = (ImageView) convertView.findViewById(R.id.imageViewMovieImage);
                 viewHolder.textViewMovieTitle = (TextView) convertView.findViewById(textViewMovieTitle);
                 viewHolder.textViewMovieOverview = (TextView) convertView.findViewById(textViewMovieOverview);
@@ -90,28 +92,31 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
                 if (isLandscape) {
                     Picasso.with(getContext())
                             .load(movie.getBackdropPath("original"))
+                            .transform(new RoundedCornersTransformation(10, 10))
                             .into(popularMovieViewHolder.imageViewMovieImage);
                 } else {
                     Picasso.with(getContext())
                             .load(movie.getBackdropPath("w1280"))
+                            .transform(new RoundedCornersTransformation(10, 10))
                             .into(popularMovieViewHolder.imageViewMovieImage);
                 }
             } else {
-                viewHolder = (ViewHolder) convertView.getTag();
+                viewHolder = (NonPopularViewHolder) convertView.getTag();
 //                viewHolder.imageViewMovieImage.setImageResource(0); // clear out image from convertview
                 if (isLandscape) {
                     Picasso.with(getContext())
                             .load(movie.getBackdropPath())
+                            .transform(new RoundedCornersTransformation(10, 10))
                             .into(viewHolder.imageViewMovieImage);
                 } else {
                     Picasso.with(getContext())
                             .load(movie.getPosterPath())
+                            .transform(new RoundedCornersTransformation(10, 10))
                             .into(viewHolder.imageViewMovieImage);
                 }
                 viewHolder.textViewMovieTitle.setText(movie.getTitle());
                 viewHolder.textViewMovieOverview.setText(movie.getOverview());
             }
-
         }
         return convertView;
     }
