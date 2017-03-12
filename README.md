@@ -39,7 +39,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-![](./demo/flicks-2.gif)
+![](./demo/flicks-1.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
@@ -54,7 +54,7 @@ Describe any challenges encountered while building the app.
 
 ## License
 
-    Copyright [2017] [Ankit Jasujs]
+    Copyright [2017] [Ankit Jasuja]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
