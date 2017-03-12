@@ -25,8 +25,8 @@ public class Movie {
     private String backdropPath;
     private String title;
     private String overview;
-    private List<String> backdropPaths;
-
+    private List<String> backdropPaths = new ArrayList<>();
+    private double voteAverage;
 
     public Movie() {
         // empty constructor needed by the Parceler library
@@ -38,11 +38,13 @@ public class Movie {
         this.backdropPath = jsonObject.getString("backdrop_path");
         this.title = jsonObject.getString("original_title");
         this.overview = jsonObject.getString("overview");
+        this.voteAverage = jsonObject.getDouble("vote_average");
     }
 
     public String getId() {
         return id;
     }
+
 
     public String getPosterPath() {
         return getPosterPath(POSTER_WIDTH);
@@ -90,6 +92,10 @@ public class Movie {
             movies.add(new Movie(movieJsonArray.getJSONObject(i)));
         }
         return movies;
+    }
+
+    public double getVoteAverage() {
+        return voteAverage;
     }
 
     @Override

@@ -33,6 +33,10 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
         private TextView textViewMovieOverview;
     }
 
+    private static class PopularMovieViewHolder {
+        private ImageView imageViewMovieImage;
+    }
+
     public MoviesAdapter(Context context, List<Movie> movies) {
         super(context, android.R.layout.simple_list_item_1, movies);
         checkOrientation();
@@ -47,6 +51,16 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
         }
     }
 
+    @Override
+    public int getViewTypeCount() {
+        return 2; // popular and non-popular
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        Movie movie = getItem(position);
+        return isPopular(movie) ?  0 : 1;
+    }
 
     @NonNull
     @Override
@@ -56,32 +70,53 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
 
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.item_movie, parent, false);
-
-            viewHolder = new ViewHolder();
-            viewHolder.imageViewMovieImage = (ImageView) convertView.findViewById(R.id.imageViewMovieImage);
-            viewHolder.textViewMovieTitle = (TextView) convertView.findViewById(textViewMovieTitle);
-            viewHolder.textViewMovieOverview = (TextView) convertView.findViewById(textViewMovieOverview);
-            convertView.setTag(viewHolder);
+            if (getItemViewType(position) == 0) {
+                convertView = inflater.inflate(R.layout.item_movie_popular, parent, false);
+                PopularMovieViewHolder popularMovieViewHolder = new PopularMovieViewHolder();
+                popularMovieViewHolder.imageViewMovieImage = (ImageView) convertView.findViewById(R.id.imageViewMovieImage);
+                convertView.setTag(popularMovieViewHolder);
+            } else {
+                convertView = inflater.inflate(R.layout.item_movie, parent, false);
+                viewHolder = new ViewHolder();
+                viewHolder.imageViewMovieImage = (ImageView) convertView.findViewById(R.id.imageViewMovieImage);
+                viewHolder.textViewMovieTitle = (TextView) convertView.findViewById(textViewMovieTitle);
+                viewHolder.textViewMovieOverview = (TextView) convertView.findViewById(textViewMovieOverview);
+                convertView.setTag(viewHolder);
+            }
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+            if (getItemViewType(position) == 0) {
+                PopularMovieViewHolder popularMovieViewHolder = (PopularMovieViewHolder) convertView.getTag();
+//                popularMovieViewHolder.imageViewMovieImage.setImageResource(0);
+                if (isLandscape) {
+                    Picasso.with(getContext())
+                            .load(movie.getBackdropPath("original"))
+                            .into(popularMovieViewHolder.imageViewMovieImage);
+                } else {
+                    Picasso.with(getContext())
+                            .load(movie.getBackdropPath("w1280"))
+                            .into(popularMovieViewHolder.imageViewMovieImage);
+                }
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+//                viewHolder.imageViewMovieImage.setImageResource(0); // clear out image from convertview
+                if (isLandscape) {
+                    Picasso.with(getContext())
+                            .load(movie.getBackdropPath())
+                            .into(viewHolder.imageViewMovieImage);
+                } else {
+                    Picasso.with(getContext())
+                            .load(movie.getPosterPath())
+                            .into(viewHolder.imageViewMovieImage);
+                }
+                viewHolder.textViewMovieTitle.setText(movie.getTitle());
+                viewHolder.textViewMovieOverview.setText(movie.getOverview());
+            }
 
-        viewHolder.imageViewMovieImage.setImageResource(0); // clear out image from convertview
-        if (isLandscape) {
-            Picasso.with(getContext())
-                    .load(movie.getBackdropPath())
-//                    .placeholder(R.drawable.loading)
-                    .into(viewHolder.imageViewMovieImage);
-        } else {
-            Picasso.with(getContext())
-                    .load(movie.getPosterPath())
-//                    .placeholder(R.drawable.loading)
-                    .into(viewHolder.imageViewMovieImage);
         }
-        viewHolder.textViewMovieTitle.setText(movie.getTitle());
-        viewHolder.textViewMovieOverview.setText(movie.getOverview());
-
         return convertView;
+    }
+
+    private boolean isPopular(Movie movie) {
+        return movie.getVoteAverage() > 7;
     }
 }
